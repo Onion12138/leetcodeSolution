@@ -123,4 +123,52 @@ class Solution {
     }
 }
 ```
+## 分治算法
+### 专题1：归并排序
+#### 例题1：翻转对(493)
+给定一个数组 nums ，如果 i < j 且 nums[i] > 2*nums[j] 我们就将 (i, j) 称作一个重要翻转对。
+你需要返回给定数组中的重要翻转对的数量。
+```
+class Solution {
+    public int reversePairs(int[] nums) {
+        return (int)mergeSort(nums, 0, nums.length-1);
+    }
+    private long mergeSort(int [] nums, int begin, int end){
+        if(begin >= end)
+            return 0;
+        int mid = begin + end >> 1;
+        long leftCnt = mergeSort(nums, begin, mid);
+        long rightCnt = mergeSort(nums, mid+1, end);
+        long midCnt = 0;
+        int [] temp = new int[end - begin + 1];
+        int i = begin, j = mid + 1, index = 0;
+        while (i <= mid && j <= end){
+            if ((long)nums[i] > (long)2 * nums[j]) {
+                midCnt += mid - i + 1;
+                j ++;
+            }
+            else
+                i ++;
+        }
+        i = begin;
+        j = mid + 1;
+        while (i <= mid && j <= end){
+            if (nums[i] > nums[j]) {
+                temp[index++] = nums[j++];
+            }
+            else{
+                temp[index++] = nums[i++];
+            }
+        }
+        while (i <= mid)
+            temp[index++] = nums[i++];
+        while (j <= end)
+            temp[index++] = nums[j++];
+        for (int k = begin; k <= end; k++) {
+            nums[k] = temp[k - begin];
+        }
+        return leftCnt + rightCnt + midCnt;
+    }
+}
+```
 
