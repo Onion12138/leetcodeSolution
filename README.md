@@ -8,7 +8,8 @@
 删除一个字符
 替换一个字符
 ```
-public int minDistance(String word1, String word2) {
+class Solution{
+    public int minDistance(String word1, String word2) {
         int n1 = word1.length(), n2 = word2.length();
         int [][] dp = new int[n1+1][n2+1];
         for(int i=0;i<=n1;i++)
@@ -25,6 +26,28 @@ public int minDistance(String word1, String word2) {
         }
         return dp[n1][n2];        
     }
+}
+```
+### 专题2：记忆化搜索
+#### 例题1：整数拆分（343）
+```
+class Solution {
+    private int [] memo;
+    public int integerBreak(int n) {
+        memo = new int[n+1];
+        Arrays.fill(memo, -1);
+        return breakInteger(n);
+    }
+    private int breakInteger(int n){
+        if(memo[n] != -1)
+            return memo[n];
+        int max = 0;
+        for(int i = 1; i < n; i ++){
+            max = Math.max(max,Math.max(i*(n-i), i*breakInteger(n-i)));
+        }
+        return memo[n] = max;    
+    }
+}
 ```
 ## 递归与回溯算法
 
