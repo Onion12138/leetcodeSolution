@@ -187,6 +187,42 @@ class Solution {
     }
 }
 ```
+### 专题2：回溯法
+#### 例题1：分割回文串（131）
+```
+class Solution {
+    private ArrayList<List<String>> res;
+    public List<List<String>> partition(String s) {
+        res = new ArrayList<>();
+        part(s,0, new ArrayList<>());
+        return res;
+    }
+    public boolean isHuiWen(String s){
+        int i = 0;
+        int j = s.length() - 1;
+        while(i <= j){
+            if(s.charAt(i) != s.charAt(j)){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+    public void part(String s, int i, ArrayList<String> arr){
+        if(i == s.length()){
+            res.add(new ArrayList<String>(arr));
+        }
+        for(int j = i; j < s.length(); j++){
+            if(isHuiWen(s.substring(i,j+1))){
+                arr.add(s.substring(i,j+1));
+                part(s, j+1, arr);
+                arr.remove(arr.size()-1);
+            }
+        }
+    }
+}
+```
 ## 分治算法
 ### 专题1：归并排序
 #### 例题1：翻转对(493)
