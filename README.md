@@ -28,6 +28,26 @@ class Solution{
     }
 }
 ```
+#### 例题2：分割回文串II(132)
+```
+class Solution {
+    public int minCut(String s) {
+        int n = s.length();
+        boolean [][] dp = new boolean[n][n];
+        int [] min = new int[n];
+        for (int i = 0; i < n; i++) {
+            min[i] = i;
+            for (int j = 0; j <= i; j++) {
+                if (s.charAt(i) == s.charAt(j) && (j+1 > i-1 || dp[j+1][i-1])){
+                    dp[j][i] = true;
+                    min[i] = j == 0 ? 0 : Math.min(min[i], min[j-1] + 1);
+                }
+            }
+        }
+        return min[n-1];
+    }
+}
+```
 ### 专题2：记忆化搜索
 #### 例题1：整数拆分（343）
 ```

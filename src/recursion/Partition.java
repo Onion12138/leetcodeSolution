@@ -28,7 +28,7 @@ public class Partition {
     }
     public void part(String s, int i, ArrayList<String> arr){
         if(i == s.length()){
-            res.add(new ArrayList<String>(arr));
+            res.add(new ArrayList<>(arr));
         }
         for(int j = i; j < s.length(); j++){
             if(isHuiWen(s.substring(i,j+1))){
