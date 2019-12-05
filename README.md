@@ -1,7 +1,13 @@
 # 算法刷题篇
+## 图论算法
+### 专题1：搜索
+#### 例题1：单词接龙（127）
+```
+
+```
 ## 动态规划算法
 ### 专题1：区间dp
-#### 例题1：编辑距离
+#### 例题1：编辑距离（72）
 给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
 你可以对一个单词进行如下三种操作：
 插入一个字符
@@ -69,6 +75,35 @@ class Solution {
     }
 }
 ```
+#### 例题2：单词拆分II(140)
+```
+class Solution {
+    private Map<Integer, List<String>> memo;
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        memo = new HashMap<>();
+        return wordBreak(s, wordDict, 0);
+    }
+    private List<String> wordBreak(String s, List<String> wordDict, int start) {
+        if (memo.containsKey(start)){
+            return memo.get(start);
+        }
+        LinkedList<String> res = new LinkedList<>();
+        if (start == s.length()){
+            res.add("");
+        }
+        for (int end = start + 1; end <= s.length(); end++) {
+            if (wordDict.contains(s.substring(start, end))){
+                List<String> list = wordBreak(s,wordDict, end);
+                for (String l : list) {
+                    res.add(s.substring(start, end) + (l.equals("") ? "" : " ") + l);
+                }
+            }
+        }
+        memo.put(start, res);
+        return res;
+    }
+}
+```
 ### 专题3：经典算法剖析
 #### 例题1：最长上升子序列（1143）
 ```
@@ -81,6 +116,27 @@ class Solution {
             for(int j=1;j<=n;j++)
                 dp[i][j] = text1.charAt(i-1)==text2.charAt(j-1) ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j],dp[i][j-1]);
         return dp[m][n];
+    }
+}
+```
+### 专题4：状态转移方程
+#### 例题1：单词拆分(139)
+```
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        boolean []dp = new boolean[n];
+        dp[0] = true;
+        //前闭后开
+        for(int i=0; i < n; i++){
+            for(int j=0; j < i; j++){
+                if(dp[j] && wordDict.contains(s.substring(j+1, i+1))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n-1];
     }
 }
 ```
