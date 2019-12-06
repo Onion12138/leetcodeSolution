@@ -1,6 +1,50 @@
 # 算法刷题篇
 ## 图论算法
-### 专题1：搜索
+### 专题1：深度优先遍历
+#### 例题1：二叉树中的最大路径和（124）
+```
+class Solution {
+    private int res = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        maxWithRoot(root);
+        return res;
+    }
+    private int maxWithRoot(TreeNode root){
+        if (root == null){
+            return 0;
+        }
+        int left = Math.max(maxWithRoot(root.left),0);
+        int right = Math.max(maxWithRoot(root.right),0);
+        res = Math.max(res, left + right + root.val);
+        return root.val + Math.max(left, right);
+    }
+}
+```
+#### 例题2：求根到叶子节点数字之和（129）
+```java
+class Solution {
+    private int res = 0;
+    public int sumNumbers(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        sum(root, 0);
+        return res;
+    }
+    private void sum(TreeNode root, int cur){
+        if(root.left == null && root.right == null){
+            res += 10 * cur + root.val;
+        }
+        if(root.left != null){
+            sum(root.left, 10 * cur + root.val);
+        }
+        if(root.right != null){
+            sum(root.right, 10 * cur + root.val);
+        }
+    }
+}
+```
+### 专题2：搜索
 #### 例题1：单词接龙（127）
 ```
 
