@@ -184,6 +184,48 @@ class Solution {
     }
 }
 ```
+#### 例题2：乘积最大子序列(152)
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+        int min = 1;
+        int max = 1;
+        int res = Integer.MIN_VALUE;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] < 0){
+                int temp = max;
+                max = min;
+                min = temp;
+            }
+            max = Math.max(nums[i], max * nums[i]);
+            min = Math.min(nums[i], min * nums[i]);
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+}
+```
+#### 例题3：解码方法(91)
+```java
+class Solution {
+    public int numDecodings(String s) {
+        int n = s.length();
+        if(n == 0 || s.charAt(0) == '0')
+            return 0;
+        int []dp = new int[n+1];
+        dp[0] = 1;
+        for(int i=1;i<=n;i++){
+            if(s.charAt(i-1)!='0')
+                dp[i] = dp[i-1];
+            if(i > 1 && s.charAt(i-2) == '1' )
+                dp[i] += dp[i-2];
+            if(i > 1 && s.charAt(i-2) == '2' && s.charAt(i-1) <= '6')
+                dp[i] += dp[i-2];
+        }
+        return dp[n];
+    }
+}
+```
 ## 递归与回溯算法
 
 ### 专题1：排列问题
