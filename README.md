@@ -44,7 +44,113 @@ class Solution {
     }
 }
 ```
-### 专题2：搜索
+### 专题2：广度优先遍历
+#### 例题1：二进制矩阵中的最短路径（1091）
+```java
+class Solution {
+    class Point{
+        int x;
+        int y;
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        if (grid[0][0] == 1 || grid[m-1][n-1] == 1)
+            return -1;
+        int[][] dir = {{1,-1},{1,0},{1,1},{0,-1},{0,1},{-1,-1},{-1,0},{-1,1}};
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(new Point(0, 0));
+        grid[0][0] = 1;
+        int distance = 0;
+        while (!queue.isEmpty()){
+            distance ++;
+            int size = queue.size();
+            for (int j = 0; j < size; j++) {
+                Point point = queue.poll();
+                int x = point.x;
+                int y = point.y;
+                if (x == m - 1 && y == n - 1)
+                    return distance;
+                for (int i = 0; i < 8; i++) {
+                    int newX = x + dir[i][0];
+                    int newY = y + dir[i][1];
+                    if (newX < 0 || newY < 0 || newX >= n || newY >= n)
+                        continue;
+                    if(grid[newX][newY] == 1)
+                        continue;
+                    queue.add(new Point(newX, newY));
+                    grid[newX][newY] = 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
+#### 例题2：网格中的最短路径(1293)
+```java
+class Solution {
+    class Point{
+        int x;
+        int y;
+        int z;
+        public Point(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+    }
+    public int shortestPath(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dir = {{-1,0},{1,0},{0,1},{0,-1}};
+        boolean[][][] visited = new boolean[m][n][k+1];
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(new Point(0, 0, 0));
+        visited[0][0][0] = true;
+        int distance = 0;
+        while (!queue.isEmpty()){
+            distance ++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Point point = queue.poll();
+                int x = point.x;
+                int y = point.y;
+                int z = point.z;
+                visited[x][y][z] = true;
+                if (x == m - 1 && y == n - 1)
+                    return distance - 1;
+                for (int j = 0; j < 4; j++) {
+                    int newX = x + dir[j][0];
+                    int newY = y + dir[j][1];
+                    int newZ = z;
+                    if (newX < 0 || newY < 0 || newX >= m || newY >= n)
+                        continue;
+                    if (visited[newX][newY][newZ])
+                        continue;
+                    if (grid[newX][newY] == 1){
+                        if (z < k){
+                            newZ  = z + 1;
+                        }else{
+                            continue;
+                        }
+                    }
+                    if (!visited[newX][newY][newZ]){
+                        visited[newX][newY][newZ] = true;
+                        queue.add(new Point(newX, newY, newZ));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
+### 专题3：搜索
 #### 例题1：单词接龙（127）
 ```
 
@@ -433,7 +539,7 @@ class Solution {
     }
 }
 ```
-#### 例题2：计算右侧小于当前元素的个数（315）
+#### 例题2：计算右侧小于当前元素的个数(315)
 给定一个整数数组 nums，按要求返回一个新数组 counts。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
 ```
 class Solution {
@@ -487,6 +593,26 @@ class Solution {
                 index[k] = temp[j++];
             }
         }
+    }
+}
+```
+## 贪心算法
+#### 例题1：无重叠区间(435)
+```java
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        if (intervals.length == 0)
+            return 0;
+        Arrays.sort(intervals, (a, b) -> a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
+        int res = 1;
+        int pre = 0;
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] >= intervals[pre][1]){
+                res ++;
+                pre = i;
+            }
+        }
+        return intervals.length - res;
     }
 }
 ```
