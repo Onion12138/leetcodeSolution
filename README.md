@@ -155,6 +155,28 @@ class Solution {
 ```
 
 ```
+### 专题4：最短路径
+#### 例题1：网络延迟时间(743)
+```java
+class Solution {
+    public int networkDelayTime(int[][] times, int N, int K) {
+        int[] distance = new int[N+1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[K] = 0;
+        for(int i=1;i<N;i++){
+            for(int[] pair : times){
+                int u = pair[0];
+                int v = pair[1];
+                int w = pair[2];
+                if(distance[u] != Integer.MAX_VALUE && distance[u] + w < distance[v])
+                    distance[v] = distance[u] + w;
+            }
+        }
+        int ret = Arrays.stream(distance).skip(1).max().getAsInt();
+        return ret == Integer.MAX_VALUE ? -1 :ret;  
+    }
+}
+```
 ## 动态规划算法
 ### 专题1：区间dp
 #### 例题1：编辑距离（72）
