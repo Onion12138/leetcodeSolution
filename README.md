@@ -150,10 +150,62 @@ class Solution {
     }
 }
 ```
+#### 例题3：找树左下角的值（513）
+```java
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        int ret = root.val;
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i = 0; i < size; i ++) {
+                TreeNode cur = queue.poll();
+                if(i == 0)
+                    ret = cur.val;
+                if(cur.left != null)
+                    queue.add(cur.left);
+                if(cur.right != null)
+                    queue.add(cur.right);
+            }
+        }
+        return ret;
+    }
+}
+```
 ### 专题3：搜索
 #### 例题1：单词接龙（127）
 ```
-
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> dict = new TreeSet<>(wordList);
+        Map<String, Integer> map = new HashMap<>();
+        if (!dict.contains(endWord))
+            return 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
+        map.put(beginWord, 1);
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            String cur = queue.poll();
+            for (int i = 0; i < cur.length(); i++) {
+                StringBuilder sb = new StringBuilder(cur);
+                for (char c = 'a'; c <= 'z' ; c++) {
+                    sb.replace(i,i+1, c + "");
+                    String next = sb.toString();
+                    if (next.equals(endWord)){
+                        return map.get(cur) + 1;
+                    }
+                    if (!map.containsKey(next) && dict.contains(next)) {
+                        queue.add(next);
+                        map.put(next, map.get(cur)+1);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
 ```
 ### 专题4：最短路径
 #### 例题1：网络延迟时间(743)
