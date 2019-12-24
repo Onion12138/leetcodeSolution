@@ -5,6 +5,7 @@ import java.util.Arrays;
 /**
  * @author onion
  * @date 2019/12/20 -3:53 下午
+ * 有权图最短路径，Bellman-Ford算法
  */
 public class NetworkDelayTime {
     public int networkDelayTime(int[][] times, int N, int K) {

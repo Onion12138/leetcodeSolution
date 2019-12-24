@@ -229,6 +229,48 @@ class Solution {
     }
 }
 ```
+### 专题5：拓扑排序
+#### 例题1：最小高度树(310)
+```java
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        TreeSet<Integer>[] graph = new TreeSet[n];
+        List<Integer> ret = new ArrayList<>();
+        if (n == 1) {
+            ret.add(0);
+            return ret;
+        }
+        for (int i = 0; i < n; i++) {
+            graph[i] = new TreeSet<>();
+        }
+        for (int[] edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            if (graph[i].size() == 1){
+                queue.add(i);
+            }
+        }
+        while (n > 2) {
+            int size = queue.size();
+            n -= size;
+            for (int i = 0; i < size; i++) {
+                int cur = queue.poll();
+                for (int adj : graph[cur]) {
+                    graph[adj].remove(cur);
+                    if (graph[adj].size() == 1) {
+                        queue.add(adj);
+                    }
+                }
+            }
+        }
+        ret.addAll(queue);
+        return ret;
+    }
+}
+```
 ## 动态规划算法
 ### 专题1：区间dp
 #### 例题1：编辑距离（72）
@@ -687,6 +729,63 @@ class Solution {
             }
         }
         return intervals.length - res;
+    }
+}
+```
+## 堆
+#### 例题1：接雨水II(407)
+```java
+class Solution {
+    class Node implements Comparable<Node>{
+        int height;
+        int x;
+        int y;
+        public Node(int height, int x, int y) {
+            this.height = height;
+            this.x = x;
+            this.y = y;
+        }
+        @Override
+        public int compareTo(Node node) {
+            return height - node.height;
+        }
+    }
+    public int trapRainWater(int[][] heightMap) {
+        int ret = 0;
+        int m = heightMap.length;
+        if (m == 0)
+            return 0;
+        int n = heightMap[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int[][] dir = {{1,0},{-1,0},{0,-1},{0,1}};
+        Queue<Node> queue = new PriorityQueue<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0 || i == m - 1 || j == n - 1){
+                    visited[i][j] = true;
+                    queue.add(new Node(heightMap[i][j], i, j));
+                }
+            }
+        }
+        int maxHeight = Integer.MIN_VALUE;
+        while (!queue.isEmpty()){
+            Node node = queue.poll();
+            int h = node.height;
+            int x = node.x;
+            int y = node.y;
+            maxHeight = Math.max(h,maxHeight);
+            for (int i = 0; i < 4; i++) {
+                int newX = x + dir[i][0];
+                int newY = y + dir[i][1];
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n && !visited[newX][newY]){
+                    if (heightMap[newX][newY] < maxHeight)
+                        ret += maxHeight - heightMap[newX][newY];
+                    queue.add(new Node(heightMap[newX][newY], newX, newY));
+                    visited[newX][newY] = true;
+                }
+            }
+        }
+        return ret;
     }
 }
 ```
